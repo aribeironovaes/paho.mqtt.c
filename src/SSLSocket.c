@@ -442,7 +442,9 @@ exit:
 void SSLSocket_terminate()
 {
 	FUNC_ENTRY;
+	CRYPTO_set_locking_callback(NULL);
 	free(sslLocks);
+	sslLocks = NULL;
 	FUNC_EXIT;
 }
 
