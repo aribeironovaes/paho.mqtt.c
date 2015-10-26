@@ -445,6 +445,14 @@ exit:
 void SSLSocket_terminate()
 {
 	FUNC_ENTRY;
+	//Cleaning up callbacks, so if SSL_library_init gets called by another user on the same process it does not break. 
+#if (OPENSSL_VERSION_NUMBER >= 0x010000000)
+	CRYPTO_THREADID_set_callback(NULL);
+#else
+	CRYPTO_set_id_callback(NULL);
+#endif
+	CRYPTO_set_locking_callback(NULL);
+
 	EVP_cleanup();
 	ERR_free_strings();
 	if (sslLocks)
