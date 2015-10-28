@@ -384,11 +384,11 @@ extern void SSLLocks_callback(int mode, int n, const char *file, int line)
 {
 	if (sslLocks)
 	{
-		if (mode & CRYPTO_LOCK)
-			SSL_lock_mutex(&sslLocks[n]);
-		else
-			SSL_unlock_mutex(&sslLocks[n]);
-	}
+	if (mode & CRYPTO_LOCK)
+		SSL_lock_mutex(&sslLocks[n]);
+	else
+		SSL_unlock_mutex(&sslLocks[n]);
+}
 }
 
 int SSLSocket_initialize()   
@@ -463,7 +463,8 @@ void SSLSocket_terminate()
 		{
 			SSL_destroy_mutex(&sslLocks[i]);
 		}
-		free(sslLocks);
+	    free(sslLocks);
+		sslLocks = NULL;
 	}
 	FUNC_EXIT;
 }
